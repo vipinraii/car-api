@@ -1,0 +1,26 @@
+{
+  "name": "car-rent-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vipinraii/car-rent-api.git"
+  },
+  "author": "vipinrai",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vipinraii/car-rent-api/issues"
+  },
+  "homepage": "https://github.com/vipinraii/car-rent-api#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.7.4",
+    "morgan": "^1.9.1"
+  }
+}
