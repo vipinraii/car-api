@@ -5,9 +5,9 @@ const bodyParser = require('body-parser');
 const mongoose =require('mongoose');
 
 const carsRoutes = require('./api/routes/cars');
+const userRoutes= require('./api/routes/user');
 
-
-mongoose.connect('mongodb+srv://Node-car-rent:'+process.env.MONGO_ATLAS_PW + '@node-car-rent-efjky.mongodb.net/test?retryWrites=true&w=majority');
+mongoose.connect('mongodb+srv://Node-car-rent:'+process.env.MONGO_ATLAS_PW + '@node-car-rent-efjky.mongodb.net/car?retryWrites=true&w=majority');
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended:false}));
@@ -28,6 +28,7 @@ app.use((req,res,next)=>{
 
 
 app.use('/cars',carsRoutes);
+app.use('/user',userRoutes);
 
 app.use((req,res,next)=>{
     const error =new Error('Not Found');

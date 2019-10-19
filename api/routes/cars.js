@@ -2,20 +2,20 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const  Car =require('../models/car');
-
+const checkAuth = require('../middleware/check-auth');
 
 router.get('/',(req,res,next)=>{
-    Car.find()
+    Car.find().select('brand vehicleNumber vModel vPrice')
     .exec()
     .then(docs =>{
-        console.log(docs);
-        if(docs.length>=0){
-            res.status(200).json(docs);
-        }else{
-            res.status(200).json({
-                message:"No entries founnd"
-            });
-        }
+        const response ={
+            count:docs.length,
+            cars:docs
+
+        };
+
+        res.status(200).json(response);
+        
     })
     .catch(err => {
         console.log(err);
@@ -26,7 +26,7 @@ router.get('/',(req,res,next)=>{
 
 });
 
-router.post('/',(req,res,next)=>{
+router.post('/', checkAuth ,(req,res,next)=>{
     const car= new  Car({
         _id:new mongoose.Types.ObjectId(),
         brand:req.body.brand,
@@ -39,7 +39,7 @@ router.post('/',(req,res,next)=>{
     .then(result => {
         console.log(result);
         res.status(200).json({
-            message:'post request to /cars',
+            message:'Created Cars Successfully',
            addedCars:result,
         });
      })
@@ -56,12 +56,15 @@ router.post('/',(req,res,next)=>{
 });
 router.get('/:carId',(req,res,next)=>{
     const id=req.params.carId;
-    Car.findById(id)
+    Car.find().select('brand vehicleNumber vModel vPrice')
     .exec()
     .then(doc =>{
         console.log("From Database",doc);
         if(doc){
-            res.status(200).json(doc);
+            res.status(200).json({
+                cars:doc
+
+            });
         }else{
             res.status(404).json({message:"No valid entry for provided ID"});
         }
@@ -73,7 +76,7 @@ router.get('/:carId',(req,res,next)=>{
     
 
 });
-router.patch('/:carId',(req,res,next)=>{
+router.patch('/:carId',checkAuth,(req,res,next)=>{
     const id=req.params.carId;
     const updateOps={};
     for(const ops of req.body){
@@ -92,7 +95,7 @@ router.patch('/:carId',(req,res,next)=>{
         });
     });
 });
-router.delete('/:carId',(req,res,next)=>{
+router.delete('/:carId',checkAuth,(req,res,next)=>{
     const id=req.params.carId;
     Car.remove({_id: id}).exec().then(result=>{
         res.status(200).json(result);
